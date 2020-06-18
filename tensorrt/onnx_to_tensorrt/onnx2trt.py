@@ -19,6 +19,7 @@ def main():
     TRT_LOGGER = trt.Logger(trt.Logger.VERBOSE)
     EXPLICIT_BATCH = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)
     builder = trt.Builder(TRT_LOGGER)
+
     network = builder.create_network(EXPLICIT_BATCH)
     parser = trt.OnnxParser(network, TRT_LOGGER)
     model = open(model_path, 'rb')
@@ -27,6 +28,9 @@ def main():
         for error in range(parser.num_errors):
             print(parser.get_error(error))
 
+    
+    builder.max_batch_size = 1
+    builder.max_workspace_size = 1 << 30
     engine = builder.build_engine(network, builder.create_builder_config())
     
     plan=engine.serialize()
