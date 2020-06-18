@@ -15,6 +15,7 @@ def main():
 
     model_path = args.onnx_path
 
+    # VERBOSE 可以查看转化过程中各个层的输入输出信息
     TRT_LOGGER = trt.Logger(trt.Logger.VERBOSE)
     EXPLICIT_BATCH = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)
     builder = trt.Builder(TRT_LOGGER)
