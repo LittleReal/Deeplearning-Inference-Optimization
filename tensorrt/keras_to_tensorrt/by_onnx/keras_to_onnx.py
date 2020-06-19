@@ -6,36 +6,33 @@ from keras.models import load_model
 import numpy as np
 import argparse
 
-def change_batch_dim(model, input_name, output_name):
-    actual_batch_dim = 1
+def change_batch_dim(model, actual_batch=1):
     inputs = model.graph.input
     for input in inputs:
-        if input.name == input_name:
-            dim1 = input.type.tensor_type.shape.dim[0]
-            dim1.dim_value = actual_batch_dim
+        dim1 = input.type.tensor_type.shape.dim[0]
+        if dim1.dim_param=="N":
+            dim1.dim_value = actual_batch
 
     outputs = model.graph.output
     for output in outputs:
-        if output.name == output_name:
-            dim1 = output.type.tensor_type.shape.dim[0]
-            dim1.dim_value = actual_batch_dim
+        dim1 = output.type.tensor_type.shape.dim[0]
+        if dim1.dim_param=="N":
+            dim1.dim_value = actual_batch
 
 def main():
     parser = argparse.ArgumentParser(description = 'Parameters for keras model convert to onnx')
     parser.add_argument('--keras_path', '-keras', required = True, type = str, 
     help = 'keras model file path')
-    parser.add_argument('--input_name', '-input', required = True, type = str, 
-    help = 'input name of model')
-    parser.add_argument('--output_name', '-output', required = True, type = str, 
-    help = 'output name of model')
     parser.add_argument('--onnx_path', '-onnx', required = True, type = str, 
     help = 'save path of onnx model')
+    parser.add_argument("--batch_size", "-batch", type = int, default = 1,
+    help = "actual batch size")
     args = parser.parse_args()
 
     keras_model = load_model(args.keras_path)
     # target_opset sometimes needs to be given
     onnx_model = keras2onnx.convert_keras(keras_model, keras_model.name)
-    change_batch_dim(onnx_model, args.input_name, args.output_name)
+    change_batch_dim(onnx_model, args.batch_size)
     onnx.save_model(onnx_model, args.onnx_path)
 
     # onnx_model inference.

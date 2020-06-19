@@ -1,8 +1,12 @@
 # Keras Convert to Tensorrt By Onnx
 
 ## Keras Convert to Onnx
-`python keras2onnx.py --keras_path keras_model_path --input_name model_input_name --output_name model_output_name --onnx_path onnx_model_save_path`  
-`input_name`、`output_name` 用于将 onnx_model 中的 batch 维改为 1，因为在接下来的 onnx-tensorrt 中不支持 batch 维为不确定的 `N`。
+`python keras_to_onnx.py --keras_path keras_model_path --onnx_path onnx_model_save_path`  
+
+注意 `keras2onnx` 的要从源码安装：  
+pip install -U git+https://github.com/microsoft/onnxconverter-common
+pip install -U git+https://github.com/onnx/keras-onnx  
+refer to [keras2onnx](https://github.com/onnx/keras-onnx)
 
 ## Onnx Convert to Tensorrt
 参考 [onnx2trt](../../onnx_to_tensorrt/README.md)
