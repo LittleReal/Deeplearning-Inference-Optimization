@@ -23,7 +23,7 @@ Clip_TRT
 
 ## Plugin Onnx Parser
 
-**DEFINE_BUILTIN_OP_IMPORTER** onnxParser 解析 op 时的 api，每个算子都有对应的 DEFINE_BUILTIN_OP_IMPORTER，比如 DEFINE_BUILTIN_OP_IMPORTER(InstanceNormalization)，InstanceNormalization 时对应的在 onnx 中注册的 onnx_op_name，其对应的在 TensorRT 中的 trt_op_name 是在定义 plugin 时自定义的，不过 trt_op_name  要和 DEFINE_BUILTIN_OP_IMPORTER 中的 pluginName 对应上。
+**DEFINE_BUILTIN_OP_IMPORTER** onnxParser 解析 op 时的 api，如果没有REGISTER_TENSORRT_PLUGIN相应的op，则需要自己去写对应的 DEFINE_BUILTIN_OP_IMPORTER，比如 DEFINE_BUILTIN_OP_IMPORTER(InstanceNormalization)，InstanceNormalization 时对应的在 onnx 中注册的 onnx_op_name，其对应的在 TensorRT 中的 trt_op_name 是在定义 plugin 时自定义的，不过 trt_op_name  要和 DEFINE_BUILTIN_OP_IMPORTER 中的 pluginName 对应上。
 
 **initLibNvInferPlugins** 引入所有 plugin op 的 api，只有引用了这个 api 后，才能使用 TensorRT 中的自定义 plugin。
 
@@ -36,7 +36,7 @@ Clip_TRT
 创建 plugin  
 `IPluginV2 *pluginObj = creator->createPlugin(layerName, pluginData);`  
 将 plugin 添加到 network 中  
-`auto layer = network.addPluginV2(&inputs[0], int(inputs.size()), pluginObj);`  
+`auto layer = network->addPluginV2(&inputs[0], int(inputs.size()), pluginObj);`  
 添加其他层，序列化 engine 等  
 释放对象或数据资源  
 `pluginObj->destroy()`  

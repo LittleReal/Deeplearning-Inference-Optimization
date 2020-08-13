@@ -1,5 +1,5 @@
 # NnInfer.h
-NvInfer.h 中主要适合 Network 创建相关的接口，也是在 Model 转换或创建过程中参考最多的 include 文件。
+NvInfer.h 中主要定义了一些基础类和 ILayer、INetWorkDefinition、IBuilder，以及继承自 ILayer 的 IConvolutionLayer 等，也是在 Model 转换或创建过程中参考最多的 include 文件。
 
 ## Dims
 关于 Dims 相关 class 的定义，Dims2, DimsHW, Dims3, DimsCHW, Dims4, DimsNCHW。不过 DimsCHW 和 DimsNCHW 将被 Dims3 和 Dims4 替代。
@@ -14,23 +14,24 @@ Network 中 Tensor 的定义。包含了 Name, Dims, Type 等信息。比如 Net
 网络模型节点的基类定义。
 
 ## PaddingMode
-kEXPLICIT_ROUND_DOWN = 0, //!< Use explicit padding, rounding output size down.
-kEXPLICIT_ROUND_UP = 1,   //!< Use explicit padding, rounding output size up.
-kSAME_UPPER = 2,          //!< Use SAME padding, with prePadding <= postPadding.
-kSAME_LOWER = 3,          //!< Use SAME padding, with prePadding >= postPadding.
-kCAFFE_ROUND_DOWN = 4,    //!< Use CAFFE padding, rounding output size down, uses prePadding value.
+kEXPLICIT_ROUND_DOWN = 0, //!< Use explicit padding, rounding output size down.  
+kEXPLICIT_ROUND_UP = 1,   //!< Use explicit padding, rounding output size up.  
+kSAME_UPPER = 2,          //!< Use SAME padding, with prePadding <= postPadding.  
+kSAME_LOWER = 3,          //!< Use SAME padding, with prePadding >= postPadding.  
+kCAFFE_ROUND_DOWN = 4,    //!< Use CAFFE padding, rounding output size down, uses prePadding value.  
 kCAFFE_ROUND_UP = 5       //!< Use CAFFE padding, rounding output size up, uses prePadding value.
 
 ## 各 Layer 的定义
 继承 ILayer。
 
 ## INetworkDefinition
-Model 的定义。提供了基本的接口，如 addInput, addConvolution, markOutput ...。将所有layer以及相应输入输出信息添加到 Network 中，即得到整个 Network。
+Network 结构的定义。提供了基本的接口，如 addInput, addConvolution, markOutput ...。将所有layer以及相应输入输出信息添加到 Network 中，即得到整个 Network。
 
 ## Calibrator
 校准相关。CalibrationAlgoType, IInt8Calibrator, IInt8EntropyCalibrator, ...
 
 ## Builder
+IBuilder 是为了根据 Network 创建 engine，而 engine 就是推理引擎。
 ### BuilderFlag
 kFP16 = 0,         Enable FP16 layer selection, with FP32 fallback.   
 kINT8 = 1,         Enable Int8 layer selection, with FP32 fallback with FP16 fallback if kFP16 also specified.  

@@ -7,4 +7,4 @@
 
 2. 调用 TensorRT 的 onnx parser  
 [python onnx2trt](./onnx2trt.py)  
-[C++ onnx2trt](https://github.com/onnx/onnx-tensorrt/blob/84b5be1d6fc03564f2c0dba85a2ee75bad242c2e/main.cpp)
+[C++ onnx2trt](./onnx2trt.cpp)
